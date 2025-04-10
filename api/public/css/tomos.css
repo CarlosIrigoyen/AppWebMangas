@@ -1,92 +1,164 @@
-    <style>
-        .container {
-            margin-top: 20px;
-        }
-        .card-filtros {
-            margin-bottom: 20px;
-        }
-        .form-check {
-            margin-bottom: 10px;
-        }
-        /* Tarjeta del tomo individual: ancho 240px, formato "libro" */
-        .card-tomo {
-            width: 240px;
-            margin: 15px auto;
-            border-radius: 10px;
-            overflow: visible;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .card-tomo img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-        /* Footer de cada tarjeta de tomo: botones en columna con separación */
-        .card-tomo .card-footer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            background-color: #fff;
-            border-top: 1px solid #e9ecef;
-            padding: 10px;
-            overflow: visible;
-        }
-        .card-tomo .card-footer .btn {
-            padding: 5px 8px;
-        }
-        /* Filtros: radio buttons y select dinámico */
-        .filtros-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-        }
-        .filter-select {
-            display: none;
-            max-width: 250px;
-        }
-        #searchBar {
-            margin-bottom: 15px;
-            display: block;
-        }
-        .separator {
-            border-top: 1px solid #ccc;
-            margin: 15px 0;
-        }
-        /* Paginación personalizada */
-        .pagination-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .btn-crear-tomo {
-            width: auto;
-            padding: 8px 20px;
-            font-size: 16px;
-            text-align: center;
-            border-radius: 5px;
-        }
-        .btn-crear-tomo:hover {
-            background-color: #0056b3;
-        }
-        /* Tarjeta del tomo individual: max ancho 240px para mantener el formato "libro" */
-        .card-tomo {
-            max-width: 240px;
-            width: 100%;
-            margin: 15px auto;
-            border-radius: 10px;
-            overflow: visible;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        @media (max-width: 1024px) {
-            .card-tomo {
-                max-width: 200px;
-                margin: 15px auto;
-            }
-        }
+/* === ESTILOS GENERALES === */
+.container {
+    margin-top: 20px;
+}
+.card-filtros {
+    margin-bottom: 20px;
+}
+.form-check {
+    margin-bottom: 10px;
+}
+.card-tomo {
+    max-width: 240px;
+    width: 100%;
+    margin: 15px auto;
+    border-radius: 10px;
+    overflow: visible;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.card-tomo img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.card-tomo .card-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background-color: #fff;
+    border-top: 1px solid #e9ecef;
+    padding: 10px;
+    overflow: visible;
+}
+.card-tomo .card-footer .btn {
+    width: 100%;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+.filtros-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+.filter-select {
+    display: none;
+    max-width: 250px;
+}
+#searchBar {
+    margin-bottom: 15px;
+    display: block;
+}
+.separator {
+    border-top: 1px solid #ccc;
+    margin: 15px 0;
+}
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.btn-crear-tomo {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+}
+.btn-crear-tomo:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 1024px) {
+    .card-tomo {
+        max-width: 200px;
+        margin: 15px auto;
+    }
+}
+
+/* === FONDOS Y COLORES === */
+.modal-body.bg-light {
+    background-color: #f0f0f0 !important;
+}
+.dark-mode .bg-light {
+    background-color: #454d55 !important;
+    color: #fff !important;
+}
+
+/* === INPUTS Y SELECTS DEL MODAL: FONDO BLANCO, TEXTO NEGRO, FOCUS SOLO EN BORDE === */
+.modal-body .form-control,
+.modal-body .form-select,
+.modal-body input[type="file"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ced4da !important;
+    box-shadow: none !important;
+}
+.modal-body input[type="file"]::file-selector-button {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ced4da !important;
+}
+.modal-body .form-control:focus,
+.modal-body .form-select:focus,
+.modal-body input[type="file"]:focus {
+    /* Solo cambia el borde y agrega un enfoque para indicar selección */
+    border: 1px solid #00ff1a !important; /* verde */
+    box-shadow: none !important;
+    outline: none !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #f8f9fa !important;
+    color: #000 !important;
+    opacity: 1 !important;
+}
+.text-black,
+.dark-mode .text-dark {
+    color: #000 !important;
+}
+
+/* === ERRORES Y VALIDACIONES === */
+.is-invalid {
+    border: 1px solid #dc3545 !important; /* rojo */
+}
+.is-valid {
+    border: 1px solid #28a745 !important; /* verde */
+}
+.error-message {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* === MODAL FOOTER COMPLETO === */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+.modal-footer {
+    background-color: #212529;
+    border-top: none;
+    width: 100%;
+    border-radius: 0 0 0.5rem 0.5rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
-    </style>
+
+/* Fin del archivo */
