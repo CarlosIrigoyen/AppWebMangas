@@ -27,55 +27,71 @@ class TomoController extends Controller
     }
 
 
-    public function porManga($id)
-    {
-        $manga = Manga::findOrFail($id);
 
-        // Obtener los tomos del manga con stock bajo (menos de 10)
-        $lowStockTomos = Tomo::where('manga_id', $id)
-                             ->where('stock', '<', 10)
-                             ->get();
+    /**
+     * porManga(): Mostrar la lista de tomos de un manga.
+     *
+     * Esta función se encargará de mostrar en pantalla (por ejemplo, en la vista "listado.blade.php")
+     * una lista de todos los tomos de un manga, junto con los botones para crear uno nuevo.
 
-        // Obtener todos los tomos del manga para la paginación
-        $tomos = Tomo::where('manga_id', $id)
-                     ->orderBy('numero_tomo', 'asc')
-                     ->paginate(6);
+     */
+    public function porManga(Request $request, $id)
+{
+    $manga = Manga::findOrFail($id);
 
-        $editoriales = Editorial::all();
-        $mangas = Manga::all(); // Para otros contextos si fuera necesario
+    // Consulta base de los tomos para el manga
+    $query = Tomo::where('manga_id', $id)->orderBy('numero_tomo', 'asc');
 
-        // Último tomo general (opcional para definir valor por defecto)
-        $ultimoTomoGeneral = Tomo::where('manga_id', $id)
-                                 ->orderBy('numero_tomo', 'desc')
-                                 ->first();
+    // Paginar 6 tomos por página y conservar los parámetros en la URL
+    $tomos = $query->paginate(6)->appends($request->query());
 
-        // Construir arreglos de apoyo por editorial
-        $nextTomos = [];
-        $ultimoTomosEditorial = [];
-        foreach($editoriales as $editorial) {
-            $ultimoTomo = Tomo::where('manga_id', $id)
-                              ->where('editorial_id', $editorial->id)
-                              ->orderBy('numero_tomo', 'desc')
-                              ->first();
-            if ($ultimoTomo) {
-                $nextNumber = $ultimoTomo->numero_tomo + 1;
-                $nextDate = date('Y-m-d', strtotime('+1 month', strtotime($ultimoTomo->fecha_publicacion)));
-                $nextTomos[$editorial->id] = ['numero' => $nextNumber, 'fecha' => $nextDate];
-                $ultimoTomosEditorial[$editorial->id] = $ultimoTomo;
-            } else {
-                // Sin tomo previo: número 1 y sin fecha predeterminada
-                $nextTomos[$editorial->id] = ['numero' => 1, 'fecha' => ''];
-            }
+    // (Se omite la verificación y redirección a la última página)
+
+    // Obtener los tomos con stock bajo (menos de 10)
+    $lowStockTomos = Tomo::where('manga_id', $id)
+                         ->where('stock', '<', 10)
+                         ->get();
+
+    $editoriales = Editorial::all();
+    $mangas = Manga::all(); // Para otros contextos si fuera necesario
+
+    // Último tomo general (opcional para definir valor por defecto)
+    $ultimoTomoGeneral = Tomo::where('manga_id', $id)
+                             ->orderBy('numero_tomo', 'desc')
+                             ->first();
+
+    // Construir arreglos de apoyo por editorial
+    $nextTomos = [];
+    $ultimoTomosEditorial = [];
+    foreach ($editoriales as $editorial) {
+        $ultimoTomo = Tomo::where('manga_id', $id)
+                          ->where('editorial_id', $editorial->id)
+                          ->orderBy('numero_tomo', 'desc')
+                          ->first();
+        if ($ultimoTomo) {
+            $nextNumber = $ultimoTomo->numero_tomo + 1;
+            $nextDate = date('Y-m-d', strtotime('+1 month', strtotime($ultimoTomo->fecha_publicacion)));
+            $nextTomos[$editorial->id] = ['numero' => $nextNumber, 'fecha' => $nextDate];
+            $ultimoTomosEditorial[$editorial->id] = $ultimoTomo;
+        } else {
+            // Sin tomo previo: número 1 y sin fecha predeterminada
+            $nextTomos[$editorial->id] = ['numero' => 1, 'fecha' => ''];
         }
-
-        $defaultEditorial = $ultimoTomoGeneral ? $ultimoTomoGeneral->editorial_id : '';
-
-        // Pasar los tomos con stock bajo a la vista
-        return view('tomos.listado', compact('manga', 'tomos', 'editoriales', 'mangas', 'nextTomos', 'ultimoTomosEditorial', 'defaultEditorial', 'lowStockTomos'));
     }
 
+    $defaultEditorial = $ultimoTomoGeneral ? $ultimoTomoGeneral->editorial_id : '';
 
-
+    return view('tomos.listado', compact(
+        'manga',
+        'tomos',
+        'editoriales',
+        'mangas',
+        'nextTomos',
+        'ultimoTomosEditorial',
+        'defaultEditorial',
+        'lowStockTomos'
+    ));
+}
 
     public function store(Request $request)
 {

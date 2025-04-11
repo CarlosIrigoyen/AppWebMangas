@@ -99,9 +99,6 @@
 <!-- Se incluye el modal de creación -->
 @include('partials.modal_crear_tomo')
 
-
-
-
 @stop
 
 @section('js')
