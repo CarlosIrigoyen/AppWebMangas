@@ -1,26 +1,96 @@
-/* === ESTILOS GENERALES === */
-.container {
-    margin-top: 20px;
+/* === Estilos del botón Crear Tomo === */
+.btn-crear-tomo {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #17a2b8; /* Color de fondo similar a los botones de los cards */
+    color: white;
+    border: none;
 }
-.card-filtros {
-    margin-bottom: 20px;
+
+.btn-crear-tomo:hover {
+    background-color: #138496; /* Color de fondo más oscuro al pasar el ratón */
 }
-.form-check {
-    margin-bottom: 10px;
+
+/* === Título === */
+.text-center {
+    text-align: center;
 }
+
+/* Separador entre el texto del card y los botones */
+.separator {
+    border-top: 1px solid #e9ecef;
+    margin: 15px 0;  /* Espacio entre el contenido y los botones */
+}
+
+/* Aseguramos que el contenido del card no se sobreponga */
+.card-body {
+    padding: 15px;
+}
+
+/* Ajustar el tamaño de los botones para que se vean más uniformes */
+.card-footer .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+
+/* === Estilos del Card === */
 .card-tomo {
-    max-width: 240px;
+    max-width: 260px; /* Ajustado a 260px */
     width: 100%;
+    height: 365px; /* Altura fija de 365px */
     margin: 15px auto;
     border-radius: 10px;
-    overflow: visible;
+    overflow: hidden; /* Asegura que el contenido no se desborde */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Ajustes en la imagen */
 .card-tomo img {
     width: 100%;
-    height: auto;
-    object-fit: cover;
+    height: 180px; /* Ajustado para que la imagen no ocupe todo el espacio */
+    object-fit: cover; /* Mantiene la proporción de la imagen */
 }
+
+/* Mostrar título, número de tomo y editorial en una sola línea */
+.card-body .card-title {
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Esconde el texto que excede el contenedor */
+    text-overflow: ellipsis; /* Muestra '...' si el texto es muy largo */
+    font-size: 1rem; /* Ajusta el tamaño de la fuente si es necesario */
+}
+
+/* Separador entre el texto del card y los botones */
+.separator {
+    border-top: 1px solid #e9ecef;
+    margin: 15px 0;  /* Espacio entre el contenido y los botones */
+}
+
+/* Ajuste de los botones */
+.card-footer .btn-sm {
+    padding: 5px 8px;
+    font-size: 0.875rem;
+}
+
+/* Asegurar que los botones se vean correctamente */
+.card-footer .btn {
+    width: 100%;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+/* Ajustes en la imagen */
+.card-tomo img {
+    width: 100%;
+    height: 180px; /* Ajustado para que la imagen no ocupe todo el espacio */
+    object-fit: cover; /* Mantiene la proporción de la imagen */
+}
+
+/* Modificar el comportamiento del footer */
 .card-tomo .card-footer {
     display: flex;
     flex-direction: column;
@@ -31,6 +101,8 @@
     padding: 10px;
     overflow: visible;
 }
+
+/* Ajustar los botones */
 .card-tomo .card-footer .btn {
     width: 100%;
     text-align: center;
@@ -38,24 +110,51 @@
     font-size: 0.875rem;
     white-space: nowrap;
 }
+
+/* Asegurarse de que los botones no se desborden */
+.card-footer .btn-sm {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+}
+
+/* Asegurarse de que los cards estén alineados correctamente */
+#tomoList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#tomoList .col-md-4 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Filtros */
 .filtros-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     align-items: center;
 }
+
 .filter-select {
     display: none;
     max-width: 250px;
 }
+
 #searchBar {
     margin-bottom: 15px;
     display: block;
 }
+
+/* Separador adicional */
 .separator {
     border-top: 1px solid #ccc;
     margin: 15px 0;
 }
+
+/* Paginación */
 .pagination-container {
     display: flex;
     align-items: center;
@@ -63,28 +162,42 @@
     gap: 10px;
     margin-top: 20px;
 }
+
+/* === Modificación de estilo para el texto del card === */
+/* Mostrar título, número de tomo y editorial en una sola línea */
+.card-body .card-title {
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Esconde el texto que excede el contenedor */
+    text-overflow: ellipsis; /* Muestra '...' si el texto es muy largo */
+}
+
+/* Asegurarse de que los botones se vean correctamente */
+.card-footer .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+/* === Estilos del botón Crear Tomo === */
 .btn-crear-tomo {
     width: auto;
     padding: 8px 20px;
     font-size: 16px;
     text-align: center;
     border-radius: 5px;
-}
-.btn-crear-tomo:hover {
-    background-color: #0056b3;
+    background-color: #17a2b8; /* Color de fondo similar a los botones de los cards */
+    color: white;
+    border: none;
 }
 
-@media (max-width: 1024px) {
-    .card-tomo {
-        max-width: 200px;
-        margin: 15px auto;
-    }
+.btn-crear-tomo:hover {
+    background-color: #138496; /* Color de fondo más oscuro al pasar el ratón */
 }
 
 /* === FONDOS Y COLORES === */
 .modal-body.bg-light {
     background-color: #f0f0f0 !important;
 }
+
 .dark-mode .bg-light {
     background-color: #454d55 !important;
     color: #fff !important;
@@ -99,11 +212,13 @@
     border: 1px solid #ced4da !important;
     box-shadow: none !important;
 }
+
 .modal-body input[type="file"]::file-selector-button {
     background-color: #ffffff !important;
     color: #000000 !important;
     border: 1px solid #ced4da !important;
 }
+
 .modal-body .form-control:focus,
 .modal-body .form-select:focus,
 .modal-body input[type="file"]:focus {
@@ -114,12 +229,14 @@
     background-color: #ffffff !important;
     color: #000000 !important;
 }
+
 .form-control:disabled,
 .form-control[readonly] {
     background-color: #f8f9fa !important;
     color: #000 !important;
     opacity: 1 !important;
 }
+
 .text-black,
 .dark-mode .text-dark {
     color: #000 !important;
@@ -129,9 +246,11 @@
 .is-invalid {
     border: 1px solid #dc3545 !important; /* rojo */
 }
+
 .is-valid {
     border: 1px solid #28a745 !important; /* verde */
 }
+
 .error-message {
     color: #dc3545;
     font-size: 0.9em;
@@ -144,10 +263,12 @@
     flex-direction: column;
     height: 100%;
 }
+
 .modal-body {
     flex: 1 1 auto;
     overflow-y: auto;
 }
+
 .modal-footer {
     background-color: #212529;
     border-top: none;
@@ -159,6 +280,21 @@
     align-items: center;
 }
 
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 600px; /* Ajusta a tu gusto */
+    }
+}
 
+.modal-content {
+    max-height: 90vh;  /* El modal no supera el 90% de la pantalla */
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;  /* Scroll interno en el cuerpo del modal */
+}
 
 /* Fin del archivo */

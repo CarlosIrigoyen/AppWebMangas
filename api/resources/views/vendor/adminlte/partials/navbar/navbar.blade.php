@@ -6,9 +6,6 @@
 
     {{-- Navbar left links --}}
     <ul class="navbar-nav">
-        {{-- Left sidebar toggler link --}}
-        @include('adminlte::partials.navbar.menu-item-left-sidebar-toggler')
-
         {{-- Configured left links --}}
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-left'), 'item')
 
@@ -33,11 +30,6 @@
             @endif
         @endif
 
-        {{-- Right sidebar toggler link --}}
-        @if($layoutHelper->isRightSidebarEnabled())
-            @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
-
-        @endif
     </ul>
 
 </nav>

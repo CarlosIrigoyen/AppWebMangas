@@ -16,6 +16,10 @@ class Editorial extends Model
     public function editoriales(){
         return $this->belongsToMany(Editorial::class, 'tomo_editorial', 'tomo_id', 'editorial_id');
     }
+    public function tomos()
+    {
+        return $this->hasMany(Tomo::class, 'editorial_id');
+    }
 
 
 

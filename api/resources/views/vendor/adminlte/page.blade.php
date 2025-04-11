@@ -29,10 +29,6 @@
             @include('adminlte::partials.navbar.navbar')
         @endif
 
-        {{-- Left Main Sidebar --}}
-        @if(!$layoutHelper->isLayoutTopnavEnabled())
-            @include('adminlte::partials.sidebar.left-sidebar')
-        @endif
 
         {{-- Content Wrapper --}}
         @empty($iFrameEnabled)
@@ -44,11 +40,6 @@
         {{-- Footer --}}
         @hasSection('footer')
             @include('adminlte::partials.footer.footer')
-        @endif
-
-        {{-- Right Control Sidebar --}}
-        @if($layoutHelper->isRightSidebarEnabled())
-            @include('adminlte::partials.sidebar.right-sidebar')
         @endif
 
     </div>

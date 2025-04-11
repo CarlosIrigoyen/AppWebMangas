@@ -25,8 +25,7 @@
         </div>
     @endif
     <!-- Botón Crear Tomo -->
-
-    <h1 class="mb-4">Listado de Tomos</h1>
+    <h1 class="mb-4">Listado de Tomos - {{$manga->titulo}}</h1>
 
     <!-- Si no se encontraron tomos -->
     @if($tomos->total() == 0)
@@ -36,62 +35,73 @@
     @else
         <!-- Card contenedor para los tomos -->
         <div class="card">
-            <div class="mb-4 d-flex justify-content-end">
-                <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearTomo">
-                    <i class="fas fa-plus"></i> Crear Tomo
-                </button>
-            </div>
             <div class="card-body g-3">
+                <!-- Botón Crear Tomo alineado a la izquierda -->
+                <div class="mb-4 d-flex justify-content-start">
+                    <button type="button" class="btn btn-crear-tomo" data-bs-toggle="modal" data-bs-target="#modalCrearTomo">
+                        <i class="fas fa-plus"></i> Crear Tomo
+                    </button>
+                </div>
+                <!-- Paginación personalizada -->
+                <div class="separator"></div>
+                <div class="pagination-container d-flex justify-content-center my-3">
+                    <button class="btn btn-light"
+                            onclick="window.location.href='{{ $tomos->previousPageUrl() }}'"
+                            {{ $tomos->onFirstPage() ? 'disabled' : '' }}>
+                        &laquo; Anterior
+                    </button>
+                    <span id="pageIndicator" class="mx-3">
+                        Página {{ $tomos->currentPage() }} / {{ $tomos->lastPage() }}
+                    </span>
+                    <button class="btn btn-light"
+                            onclick="window.location.href='{{ $tomos->nextPageUrl() }}'"
+                            {{ $tomos->currentPage() == $tomos->lastPage() ? 'disabled' : '' }}>
+                        Siguiente &raquo;
+                    </button>
+                </div>
+
                 <div class="row" id="tomoList">
                     @foreach($tomos as $tomo)
-                        <div class="col-md-4 mb-4">
-                            <div class="card card-tomo">
-                                <img src="{{ asset($tomo->portada) }}" alt="Portada" class="card-img-top">
-                                <div class="card-footer d-flex justify-content-around">
-                                    <!-- Botón para abrir el modal de información -->
-                                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalInfo-{{ $tomo->id }}">
-                                        <i class="fas fa-info-circle me-1"></i> Información
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit-{{ $tomo->id }}">
-                                        <i class="fas fa-edit me-1"></i> Editar
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-{{ $tomo->id }}">
-                                        <i class="fas fa-trash me-1"></i> Eliminar
-                                    </button>
-                                </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card card-tomo">
+                            <img src="{{ asset($tomo->portada) }}" alt="Portada" class="card-img-top">
+                            <!-- Información del Tomo -->
+                            <div class="card-body">
+                                <h5 class="card-title text-center">
+                                    {{ $manga->titulo }} - Tomo {{ $tomo->numero_tomo }}
+                                </h5>
                             </div>
-                            <!-- Se incluyen los parciales de modales -->
-                            @include('partials.modal_info_tomo')
-                            @include('partials.modal_editar_tomo')
-                            @include('partials.modal_eliminar_tomo')
+                            <!-- Botones debajo de la información -->
+                            <div class="card-footer d-flex justify-content-around">
+                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalInfo-{{ $tomo->id }}">
+                                    <i class="fas fa-info-circle me-1"></i> Información
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit-{{ $tomo->id }}">
+                                    <i class="fas fa-edit me-1"></i> Editar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-{{ $tomo->id }}">
+                                    <i class="fas fa-trash me-1"></i> Eliminar
+                                </button>
+                            </div>
                         </div>
+                        <!-- Se incluyen los parciales de modales -->
+                        @include('partials.modal_info_tomo')
+                        @include('partials.modal_editar_tomo')
+                        @include('partials.modal_eliminar_tomo')
+                    </div>
                     @endforeach
                 </div>
             </div>
-        </div>
-
-        <!-- Paginación personalizada -->
-        <div class="separator"></div>
-        <div class="pagination-container d-flex justify-content-center my-3">
-            <button class="btn btn-light"
-                    onclick="window.location.href='{{ $tomos->previousPageUrl() }}'"
-                    {{ $tomos->onFirstPage() ? 'disabled' : '' }}>
-                &laquo; Anterior
-            </button>
-            <span id="pageIndicator" class="mx-3">
-                Página {{ $tomos->currentPage() }} / {{ $tomos->lastPage() }}
-            </span>
-            <button class="btn btn-light"
-                    onclick="window.location.href='{{ $tomos->nextPageUrl() }}'"
-                    {{ $tomos->currentPage() == $tomos->lastPage() ? 'disabled' : '' }}>
-                Siguiente &raquo;
-            </button>
         </div>
     @endif
 </div>
 
 <!-- Se incluye el modal de creación -->
 @include('partials.modal_crear_tomo')
+
+
+
+
 @stop
 
 @section('js')
@@ -103,23 +113,4 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    // Forzamos que el sidebar esté colapsado en todo momento
-    document.body.classList.add('sidebar-collapse');
-
-    // Desactivamos cualquier evento hover en el sidebar
-    var sidebar = document.querySelector('.main-sidebar');
-    if (sidebar) {
-        // Remover eventos de hover usando jQuery, si está disponible
-        if (typeof $ !== 'undefined') {
-            $(sidebar).off('mouseenter mouseleave');
-        }
-    }
-});
-
-    </script>
-
-
 @stop

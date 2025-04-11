@@ -19,47 +19,60 @@ class TomoController extends Controller
     public function index()
     {
         $mangas = Manga::all();
-        return view('tomos.index', compact('mangas'));
+          // Obtener todos los tomos con stock menor a 10 (sin depender de los filtros)
+          $lowStockTomos = Tomo::where('stock', '<', 10)->with('manga')->get();
+          $hasLowStock   = $lowStockTomos->isNotEmpty();
+        return view('tomos.index', compact('mangas','lowStockTomos', 'hasLowStock'));
+
     }
 
 
     public function porManga($id)
-{
-    $manga = Manga::findOrFail($id);
-    $tomos = Tomo::where('manga_id', $id)
-                ->orderBy('numero_tomo', 'asc')
-                ->paginate(6);
-    $editoriales = Editorial::all();
-    $mangas = Manga::all(); // Para otros contextos si fuera necesario
+    {
+        $manga = Manga::findOrFail($id);
 
-    // Último tomo general (opcional para definir valor por defecto)
-    $ultimoTomoGeneral = Tomo::where('manga_id', $id)
-                             ->orderBy('numero_tomo', 'desc')
-                             ->first();
+        // Obtener los tomos del manga con stock bajo (menos de 10)
+        $lowStockTomos = Tomo::where('manga_id', $id)
+                             ->where('stock', '<', 10)
+                             ->get();
 
-    // Construir arreglos de apoyo por editorial
-    $nextTomos = [];
-    $ultimoTomosEditorial = [];
-    foreach($editoriales as $editorial) {
-        $ultimoTomo = Tomo::where('manga_id', $id)
-                          ->where('editorial_id', $editorial->id)
-                          ->orderBy('numero_tomo', 'desc')
-                          ->first();
-        if ($ultimoTomo) {
-            $nextNumber = $ultimoTomo->numero_tomo + 1;
-            $nextDate = date('Y-m-d', strtotime('+1 month', strtotime($ultimoTomo->fecha_publicacion)));
-            $nextTomos[$editorial->id] = ['numero' => $nextNumber, 'fecha' => $nextDate];
-            $ultimoTomosEditorial[$editorial->id] = $ultimoTomo;
-        } else {
-            // Sin tomo previo: número 1 y sin fecha predeterminada
-            $nextTomos[$editorial->id] = ['numero' => 1, 'fecha' => ''];
+        // Obtener todos los tomos del manga para la paginación
+        $tomos = Tomo::where('manga_id', $id)
+                     ->orderBy('numero_tomo', 'asc')
+                     ->paginate(6);
+
+        $editoriales = Editorial::all();
+        $mangas = Manga::all(); // Para otros contextos si fuera necesario
+
+        // Último tomo general (opcional para definir valor por defecto)
+        $ultimoTomoGeneral = Tomo::where('manga_id', $id)
+                                 ->orderBy('numero_tomo', 'desc')
+                                 ->first();
+
+        // Construir arreglos de apoyo por editorial
+        $nextTomos = [];
+        $ultimoTomosEditorial = [];
+        foreach($editoriales as $editorial) {
+            $ultimoTomo = Tomo::where('manga_id', $id)
+                              ->where('editorial_id', $editorial->id)
+                              ->orderBy('numero_tomo', 'desc')
+                              ->first();
+            if ($ultimoTomo) {
+                $nextNumber = $ultimoTomo->numero_tomo + 1;
+                $nextDate = date('Y-m-d', strtotime('+1 month', strtotime($ultimoTomo->fecha_publicacion)));
+                $nextTomos[$editorial->id] = ['numero' => $nextNumber, 'fecha' => $nextDate];
+                $ultimoTomosEditorial[$editorial->id] = $ultimoTomo;
+            } else {
+                // Sin tomo previo: número 1 y sin fecha predeterminada
+                $nextTomos[$editorial->id] = ['numero' => 1, 'fecha' => ''];
+            }
         }
+
+        $defaultEditorial = $ultimoTomoGeneral ? $ultimoTomoGeneral->editorial_id : '';
+
+        // Pasar los tomos con stock bajo a la vista
+        return view('tomos.listado', compact('manga', 'tomos', 'editoriales', 'mangas', 'nextTomos', 'ultimoTomosEditorial', 'defaultEditorial', 'lowStockTomos'));
     }
-
-    $defaultEditorial = $ultimoTomoGeneral ? $ultimoTomoGeneral->editorial_id : '';
-
-    return view('tomos.listado', compact('manga', 'tomos', 'editoriales', 'mangas', 'nextTomos', 'ultimoTomosEditorial', 'defaultEditorial'));
-}
 
 
 
@@ -154,6 +167,7 @@ class TomoController extends Controller
     public function update(Request $request, $id)
     {
         $tomo = Tomo::findOrFail($id);
+
         $rules = [
             'manga_id'         => 'required|exists:mangas,id',
             'editorial_id'     => 'required|exists:editoriales,id',
@@ -190,24 +204,28 @@ class TomoController extends Controller
         $redirectTo = $request->input('redirect_to', route('tomos.index'));
         return redirect($redirectTo)->with('success', 'Tomo actualizado correctamente.');
     }
-
     public function updateMultipleStock(Request $request)
-    {
-        $request->validate([
-            'tomos' => 'required|array',
-            'tomos.*.id' => 'required|exists:tomos,id',
-            'tomos.*.stock' => 'required|integer|min:1',
+{
+    // Validar que se envíe un array de tomos con el stock y que cada stock sea un entero mínimo 1.
+    $request->validate([
+        'tomos' => 'required|array',
+        'tomos.*.id' => 'required|exists:tomos,id',
+        'tomos.*.stock' => 'required|integer|min:1',
+    ]);
+
+    // Recorrer cada entrada y actualizar el stock correspondiente.
+    foreach ($request->tomos as $tomoData) {
+        $tomo = Tomo::findOrFail($tomoData['id']);
+        $tomo->update([
+            'stock' => $tomoData['stock'],
         ]);
-
-        foreach ($request->tomos as $tomoData) {
-            $tomo = Tomo::findOrFail($tomoData['id']);
-            $tomo->update([
-                'stock' => $tomoData['stock'],
-            ]);
-        }
-
-        return redirect()->route('tomos.index')->with('success', 'Stocks actualizados correctamente.');
     }
+
+    // Redireccionar al listado con mensaje de éxito.
+    return redirect()->route('tomos.index')->with('success', 'Stocks actualizados correctamente.');
+}
+
+
 
     public function indexPublic(Request $request)
     {
