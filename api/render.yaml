@@ -19,25 +19,16 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: APP_URL
-        value: https://<your-subdomain>.onrender.com
-
+        value: ${RENDER_EXTERNAL_URL}   # Utilizando el placeholder para la URL de la aplicación
       - key: DB_CONNECTION
-        value: pgsql
+        value: pgsql                    # Estableciendo PostgreSQL como la base de datos
       - key: DB_HOST
-        fromDatabase:
-          name: laravel-postgres
-          property: host
+        value: ${DATABASE_HOST}         # Placeholder para el host de la base de datos
       - key: DB_PORT
-        value: 5432
+        value: ${DATABASE_PORT}         # Placeholder para el puerto de la base de datos
       - key: DB_DATABASE
-        fromDatabase:
-          name: laravel-postgres
-          property: database
+        value: ${DATABASE_NAME}         # Placeholder para el nombre de la base de datos
       - key: DB_USERNAME
-        fromDatabase:
-          name: laravel-postgres
-          property: user
+        value: ${DATABASE_USER}         # Placeholder para el usuario de la base de datos
       - key: DB_PASSWORD
-        fromDatabase:
-          name: laravel-postgres
-          property: password
+        value: ${DATABASE_PASSWORD}     # Placeholder para la contraseña de la base de datos
