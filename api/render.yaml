@@ -16,7 +16,6 @@ services:
         value: production
       - key: APP_DEBUG
         value: false
-      - key: APP_KEY
         generateValue: true
       - key: APP_URL
         value: ${RENDER_EXTERNAL_URL}   # Utilizando el placeholder para la URL de la aplicación
