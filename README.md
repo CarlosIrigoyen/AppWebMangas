@@ -32,4 +32,4 @@ Las actividades que los clientes podrán realizar son las siguientes:
 
 * Registro y login
 * Compra de tomos de manga
-
+*
