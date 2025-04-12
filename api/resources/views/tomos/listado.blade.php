@@ -32,6 +32,11 @@
         <div class="alert alert-warning text-center">
             No se encontraron tomos.
         </div>
+            <div class="mb-4 d-flex justify-content-start">
+                    <button type="button" class="btn btn-crear-tomo" data-bs-toggle="modal" data-bs-target="#modalCrearTomo">
+                        <i class="fas fa-plus"></i> Crear Tomo
+                    </button>
+                </div>
     @else
         <!-- Card contenedor para los tomos -->
         <div class="card">
@@ -65,6 +70,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card card-tomo">
                             <img src="{{ asset($tomo->portada) }}" alt="Portada" class="card-img-top">
+
                             <!-- Información del Tomo -->
                             <div class="card-body">
                                 <h5 class="card-title text-center">
