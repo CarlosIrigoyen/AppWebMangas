@@ -1,8 +1,19 @@
-/vendor
-node_modules/
-tests/
-vendor/phpunit/
+# Laravel base
 .env
-.git/
+.env.*
+storage/
+tests/
+node_modules/
+*.log
 *.md
-storage/logs/
+
+# Composer extras
+vendor/*/tests/
+vendor/*/docs/
+vendor/*/examples/
+vendor/*/*.md
+
+# Git
+.git/
+.gitattributes
+.gitignore
