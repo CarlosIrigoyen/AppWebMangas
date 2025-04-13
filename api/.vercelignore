@@ -1,1 +1,8 @@
 /vendor
+node_modules/
+tests/
+vendor/phpunit/
+.env
+.git/
+*.md
+storage/logs/
