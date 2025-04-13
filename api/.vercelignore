@@ -1,26 +1,17 @@
-# Laravel base
+# Archivos y directorios comunes a ignorar
 .env
 .env.*
-storage/
-tests/
-node_modules/
 *.log
 *.md
-
-# Composer extras
-vendor/*/tests/
-vendor/*/docs/
-vendor/*/examples/
-vendor/*/*.md
-
-# Git
+node_modules/
+storage/
+tests/
 .git/
 .gitattributes
 .gitignore
 
-.git
-tests/
-storage/logs/
-storage/app/public/
-node_modules/
-*.log
+# Archivos y directorios específicos de Composer
+vendor/*/tests/
+vendor/*/docs/
+vendor/*/examples/
+vendor/*/*.md
