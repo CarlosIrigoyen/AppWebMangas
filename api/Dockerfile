@@ -20,15 +20,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establecemos el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiamos los archivos del proyecto Laravel
-COPY . /var/www/html
+# Copiamos los archivos del proyecto Laravel y establecemos el propietario
+COPY --chown=www-data:www-data . /var/www/html
 
 # Instalamos las dependencias de PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Establecemos permisos y propietarios para Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Establecemos permisos para Laravel
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponemos el puerto 80
 EXPOSE 80
