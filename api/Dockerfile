@@ -17,11 +17,14 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Instalamos Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copiamos los archivos del proyecto
-COPY . .
+# Copiamos los archivos del proyecto desde la carpeta 'api'
+COPY api/ /var/www/html
 
-# Instalamos las dependencias de PHP (debe estar en el mismo directorio que el Dockerfile)
-RUN composer install --no-dev --optimize-autoloader
+# Establecemos el directorio de trabajo en 'public'
+WORKDIR /var/www/html/public
+
+# Instalamos las dependencias de PHP
+RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
 
 # Exponemos el puerto 80
 EXPOSE 80
