@@ -1,7 +1,12 @@
-# Utilizamos una imagen oficial de PHP con Apache
 FROM php:8.3-apache
 
-# Habilitamos mod_rewrite
+# Establecemos el DocumentRoot a la carpeta public de Laravel
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+# Actualizamos la configuración de Apache para usar el nuevo DocumentRoot
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+
+# Habilitamos mod_rewrite (utilizado por Laravel)
 RUN a2enmod rewrite
 
 # Instalamos las dependencias del sistema y extensiones de PHP necesarias
