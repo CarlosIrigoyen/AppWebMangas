@@ -17,3 +17,10 @@ vendor/*/*.md
 .git/
 .gitattributes
 .gitignore
+
+.git
+tests/
+storage/logs/
+storage/app/public/
+node_modules/
+*.log
