@@ -28,6 +28,9 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Exponemos el puerto 80
 EXPOSE 80
+# Establecer permisos y propietarios para Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Comando para iniciar Apache en el contenedor
 CMD ["apache2-foreground"]
